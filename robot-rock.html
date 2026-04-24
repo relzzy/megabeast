@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Rock – Megabeast Productions</title>
+    <meta name="description"
+        content="Robot Rock – A fully interactive walking robot act by Megabeast Productions. High-tech entertainment for corporate events, festivals, and private parties.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* =========================================
+           CSS CUSTOM PROPERTIES
+           ========================================= */
+        :root {
+            --bg-primary: #0b0c10;
+            --bg-secondary: #0f1117;
+            --bg-card: #12141c;
+            --bg-card-alt: #181a24;
+            --neon-cyan: #66fcf1;
+            --neon-cyan-dim: #45a29e;
+            --neon-purple: #c026d3;
+            --neon-purple-dim: #9333ea;
+            --text-primary: #e0e0e0;
+            --text-secondary: #9ca3af;
+            --text-heading: #ffffff;
+            --border-color: #1e2030;
+            --glow-cyan: 0 0 15px rgba(102, 252, 241, 0.15), 0 0 40px rgba(102, 252, 241, 0.05);
+            --glow-cyan-intense: 0 0 20px rgba(102, 252, 241, 0.3), 0 0 60px rgba(102, 252, 241, 0.1);
+            --glow-purple: 0 0 15px rgba(192, 38, 211, 0.2), 0 0 40px rgba(192, 38, 211, 0.06);
+            --glow-purple-intense: 0 0 20px rgba(192, 38, 211, 0.4), 0 0 60px rgba(192, 38, 211, 0.12);
+            --font-display: 'Orbitron', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+            --font-ui: 'Inter', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --clip-chamfer: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+            --clip-chamfer-sm: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+        }
+
+        /* =========================================
+           RESET & BASE
+           ========================================= */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 400;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.75;
+            font-size: 17px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(102, 252, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 252, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Radial gradient glow at top */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 80%;
+            background: radial-gradient(ellipse at center, rgba(102, 252, 241, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* =========================================
+           HEADER
+           ========================================= */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(11, 12, 16, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0.9rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 48px;
+            width: auto;
+            display: block;
+            filter: drop-shadow(0 0 6px rgba(102, 252, 241, 0.2));
+            transition: var(--transition);
+        }
+
+        .logo img:hover {
+            filter: drop-shadow(0 0 12px rgba(102, 252, 241, 0.4));
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: var(--transition);
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 8px var(--neon-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-cyan);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            transition: var(--transition);
+            clip-path: var(--clip-chamfer-sm);
+        }
+
+        .social-icons a:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: var(--glow-cyan);
+            background: rgba(102, 252, 241, 0.05);
+        }
+
+        .social-icons img {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            filter: brightness(0.85);
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover img {
+            filter: brightness(1.1);
+        }
+
+        /* =========================================
+           PAGE CONTAINER / GRID
+           ========================================= */
+        .page-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1280px;
+            margin: 2.5rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 7fr 3fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* =========================================
+           CARD COMPONENT
+           ========================================= */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            clip-path: var(--clip-chamfer);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            border-color: rgba(102, 252, 241, 0.15);
+        }
+
+        .card-glow {
+            box-shadow: var(--glow-cyan);
+        }
+
+        /* =========================================
+           BREADCRUMBS
+           ========================================= */
+        .breadcrumbs {
+            font-family: var(--font-ui);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .breadcrumbs a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .breadcrumbs a:hover {
+            color: var(--neon-cyan);
+        }
+
+        .breadcrumbs .separator {
+            color: var(--neon-cyan-dim);
+            margin: 0 0.5rem;
+        }
+
+        .breadcrumbs .current {
+            color: var(--neon-cyan);
+            font-weight: 500;
+        }
+
+        /* =========================================
+           TYPOGRAPHY
+           ========================================= */
+        h1 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--text-heading);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(102, 252, 241, 0.15));
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-cyan), transparent);
+        }
+
+        h3 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--neon-cyan);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            color: var(--text-primary);
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        strong {
+            color: var(--neon-cyan);
+            font-weight: 600;
+        }
+
+        ul {
+            margin-bottom: 1.5rem;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        ul li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.6rem;
+            color: var(--text-primary);
+        }
+
+        ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--neon-cyan);
+            font-weight: 700;
+        }
+
+        /* =========================================
+           HERO IMAGE
+           ========================================= */
+        .hero-image-wrap {
+            margin: 1.5rem 0 2rem;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            clip-path: var(--clip-chamfer);
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .hero-image-wrap:hover {
+            border-color: var(--neon-cyan-dim);
+            box-shadow: var(--glow-cyan-intense);
+        }
+
+        .hero-image-wrap img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image-wrap:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Scanline overlay */
+        .hero-image-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.03) 2px,
+                    rgba(0, 0, 0, 0.03) 4px);
+            pointer-events: none;
+        }
+
+        /* =========================================
+           ANCHOR NAV (Sub-Navigation)
+           ========================================= */
+        .anchor-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            margin: 2rem 0;
+            padding: 0;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            clip-path: var(--clip-chamfer-sm);
+            overflow: hidden;
+        }
+
+        .anchor-nav a {
+            flex: 1 1 auto;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0.9rem 1rem;
+            border-right: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .anchor-nav a:last-child {
+            border-right: none;
+        }
+
+        .anchor-nav a:hover {
+            color: var(--neon-cyan);
+            background: rgba(102, 252, 241, 0.05);
+        }
+
+        /* =========================================
+           THEMES TAG LIST
+           ========================================= */
+        .theme-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin: 1rem 0 2rem;
+        }
+
+        .theme-tag {
+            font-family: var(--font-display);
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--neon-cyan-dim);
+            color: var(--neon-cyan);
+            background: rgba(102, 252, 241, 0.05);
+            clip-path: var(--clip-chamfer-sm);
+            transition: var(--transition);
+        }
+
+        .theme-tag:hover {
+            background: rgba(102, 252, 241, 0.1);
+            box-shadow: var(--glow-cyan);
+        }
+
+        /* =========================================
+           MEDIA GALLERY
+           ========================================= */
+        .media-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0 2rem;
+        }
+
+        .gallery-item {
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            clip-path: var(--clip-chamfer-sm);
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover {
+            border-color: var(--neon-purple);
+            box-shadow: var(--glow-purple-intense);
+            transform: translateY(-3px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease, filter 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(1.1) contrast(1.05);
+        }
+
+        /* Scanline overlay on gallery */
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.04) 2px,
+                    rgba(0, 0, 0, 0.04) 4px);
+            pointer-events: none;
+        }
+
+        /* =========================================
+           LOGISTICS SECTION
+           ========================================= */
+        .logistics-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            clip-path: var(--clip-chamfer);
+            margin: 1.5rem 0;
+        }
+
+        /* =========================================
+           DOCUMENTATION BUTTONS
+           ========================================= */
+        .doc-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-display);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 0.9rem 1.5rem;
+            background: var(--bg-card-alt);
+            color: var(--neon-cyan);
+            border: 1px solid var(--neon-cyan-dim);
+            clip-path: var(--clip-chamfer-sm);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: rgba(102, 252, 241, 0.08);
+            border-color: var(--neon-cyan);
+            box-shadow: var(--glow-cyan-intense);
+            color: #ffffff;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .btn-purple {
+            border-color: var(--neon-purple-dim);
+            color: var(--neon-purple);
+        }
+
+        .btn-purple:hover {
+            background: rgba(192, 38, 211, 0.08);
+            border-color: var(--neon-purple);
+            box-shadow: var(--glow-purple-intense);
+            color: #ffffff;
+            text-shadow: 0 0 10px var(--neon-purple);
+        }
+
+        .btn-icon {
+            font-size: 1rem;
+            filter: brightness(1.2);
+        }
+
+        .btn-submit {
+            width: 100%;
+            justify-content: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        .btn-submit:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-primary);
+            text-shadow: none;
+            box-shadow: var(--glow-cyan-intense);
+        }
+
+        /* =========================================
+           SIDEBAR
+           ========================================= */
+        .sidebar {
+            position: sticky;
+            top: 90px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar .card {
+            padding: 2rem;
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+            font-size: 1.15rem;
+        }
+
+        .sidebar h2::after {
+            background: linear-gradient(90deg, var(--neon-purple), transparent);
+        }
+
+        /* =========================================
+           FORM
+           ========================================= */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            clip-path: var(--clip-chamfer-sm);
+        }
+
+        .form-control::placeholder {
+            color: #4a5568;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--neon-cyan-dim);
+            box-shadow: 0 0 0 2px rgba(102, 252, 241, 0.08);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* =========================================
+           CONTACT INFO
+           ========================================= */
+        .contact-info {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .contact-info h3 {
+            margin-top: 0;
+            font-size: 0.85rem;
+        }
+
+        .contact-info p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .contact-info a {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .contact-info a:hover {
+            text-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        /* =========================================
+           SIDEBAR PROMO IMAGE
+           ========================================= */
+        .sidebar-promo {
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            clip-path: var(--clip-chamfer-sm);
+            transition: var(--transition);
+        }
+
+        .sidebar-promo:hover {
+            border-color: var(--neon-purple);
+            box-shadow: var(--glow-purple);
+        }
+
+        .sidebar-promo img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .sidebar-promo:hover img {
+            transform: scale(1.03);
+        }
+
+        /* =========================================
+           NOTE / CALLOUT
+           ========================================= */
+        .note {
+            background: rgba(192, 38, 211, 0.06);
+            border-left: 3px solid var(--neon-purple);
+            padding: 0.75rem 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .note em {
+            color: var(--neon-purple);
+        }
+
+        /* =========================================
+           SECTION DIVIDER
+           ========================================= */
+        .section-divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+            margin: 2.5rem 0;
+        }
+
+        /* =========================================
+           RESPONSIVE
+           ========================================= */
+        @media (max-width: 1024px) {
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            h1 {
+                font-size: 2.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-inner {
+                flex-direction: column;
+                gap: 0.75rem;
+                padding: 0.75rem 1.25rem;
+            }
+
+            .nav-links {
+                gap: 1.25rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .anchor-nav {
+                flex-direction: column;
+            }
+
+            .anchor-nav a {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .anchor-nav a:last-child {
+                border-bottom: none;
+            }
+
+            .media-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                letter-spacing: 1.5px;
+            }
+
+            h2 {
+                font-size: 1.15rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-container {
+                padding: 0 1rem;
+                margin: 1.5rem auto;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.75rem 1.25rem;
+            }
+
+            .nav-links a {
+                font-size: 0.6rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .theme-tags {
+                gap: 0.4rem;
+            }
+        }
+
+        /* =========================================
+           ANIMATIONS
+           ========================================= */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                box-shadow: var(--glow-cyan);
+            }
+
+            50% {
+                box-shadow: var(--glow-cyan-intense);
+            }
+        }
+
+        .main-content {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .sidebar .card:first-child {
+            animation: fadeInUp 0.6s 0.15s ease forwards;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .sidebar .sidebar-promo {
+            animation: fadeInUp 0.6s 0.3s ease forwards;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ====== HEADER ====== -->
+    <header>
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <img src="megabeast_logo.png" alt="Megabeast Logo">
+            </a>
+
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="https://megabeast.co.uk/">Home</a></li>
+                    <li><a href="https://megabeast.co.uk/acts/">Acts</a></li>
+                    <li><a href="https://megabeast.co.uk/about-us/">About Us</a></li>
+                    <li><a href="#contact-form">Contact Us</a></li>
+                </ul>
+            </nav>
+
+            <div class="social-icons">
+                <a href="https://www.instagram.com/megabeastproductions" target="_blank" rel="noopener noreferrer">
+                    <img src="instagram_logo.webp" alt="Instagram">
+                </a>
+                <a href="https://wa.me/+447842128280" target="_blank" rel="noopener noreferrer">
+                    <img src="whatsapp_logo.webp" alt="WhatsApp">
+                </a>
+                <a href="https://www.youtube.com/channel/UCEz1yxFKX2rkUQafg7LXoxQ" target="_blank"
+                    rel="noopener noreferrer">
+                    <img src="youtube_logo.avif" alt="YouTube">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== MAIN GRID ====== -->
+    <div class="page-container">
+
+        <!-- ====== LEFT COLUMN: MAIN CONTENT ====== -->
+        <main class="card card-glow main-content">
+
+            <div class="breadcrumbs">
+                <a href="#">Home</a>
+                <span class="separator">›</span>
+                <a href="#">Acts</a>
+                <span class="separator">›</span>
+                <span class="current">Robot Rock</span>
+            </div>
+
+            <h1>Robot Rock</h1>
+
+            <!-- Hero Image -->
+            <div class="hero-image-wrap">
+                <img src="cover_pic.png" alt="Robot Rock Hero">
+            </div>
+
+            <!-- Anchor Sub-Navigation -->
+            <nav class="anchor-nav" aria-label="Page sections">
+                <a href="#about-act">About the Act</a>
+                <a href="#act-media">Act Media</a>
+                <a href="#on-the-day">On the Day</a>
+                <a href="#act-pricing">Act Pricing</a>
+                <a href="#documentation">Documentation</a>
+            </nav>
+
+            <!-- SECTION: About the Act -->
+            <section id="about-act">
+                <h2>A Technological Marvel for Your Next Event</h2>
+                <p>
+                    Robot Rock is a fully interactive walking robot that brings high-tech energy to any room. From the
+                    moment he arrives, he commands attention with loud servos and heavy footsteps as he struts in —
+                    turning every head and sparking excitement across the venue. This isn't just a costume; it's a
+                    complete sensory experience designed to immerse your guests in the future.
+                </p>
+                <p><strong>Perfect For:</strong></p>
+                <div class="theme-tags">
+                    <span class="theme-tag">Technological</span>
+                    <span class="theme-tag">Superhero</span>
+                    <span class="theme-tag">Futuristic</span>
+                    <span class="theme-tag">Family</span>
+                    <span class="theme-tag">Mechanical</span>
+                    <span class="theme-tag">Science</span>
+                </div>
+            </section>
+
+            <!-- SECTION: Features -->
+            <section>
+                <h3>Fully Programmed &amp; Interactive</h3>
+                <ul>
+                    <li>Equipped with the latest dance moves.</li>
+                    <li>Utilizes facial and hand recognition software to high-five, fist bump, shake hands, or dab with
+                        guests.</li>
+                    <li>Features an optional chest screen that can be customized to display brand logos, custom
+                        messages, or video content.</li>
+                    <li>Always accompanied by a dedicated operator who travels with the robot to control movements,
+                        answer questions, and make technical adjustments.</li>
+                </ul>
+            </section>
+
+            <!-- SECTION: Act Media / Gallery -->
+            <section id="act-media">
+                <h2>Act Media</h2>
+                <div class="media-gallery">
+                    <div class="gallery-item">
+                        <img src="robot 3.jpg" alt="Robot Rock in action">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="robot and mechanic 4.jpg" alt="Robot Rock with mechanic operator">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="Double fist.jpg" alt="Robot Rock double fist bump">
+                    </div>
+                </div>
+            </section>
+
+            <hr class="section-divider">
+
+            <!-- SECTION: On the Day / Logistics -->
+            <section id="on-the-day">
+                <h2>Your Robot Rock Booking — What to Expect</h2>
+
+                <div class="logistics-card">
+                    <h3>Arrival and Setup</h3>
+                    <p>
+                        Our costume and equipment arrive in two large trunks (approx 1m × 50cm × 50cm). The performer
+                        will need a private dressing room to apply stage makeup, dress, and get ready. We require a
+                        secure space to store the boxes, which double as a workstation for minor repairs between sets.
+                    </p>
+                </div>
+
+                <div class="logistics-card">
+                    <h3>Robot Rock Performances</h3>
+                    <p>
+                        The standard booking includes 3 × 30 minute sets inside the robot suit. To ensure safety and
+                        high energy, we require at least a 45-minute rest period between sets. Because the suit is
+                        around 2 meters tall, we need a performance space with at least 2.5 meters of height clearance.
+                        Due to reduced vision and the bulky nature of the costume, the operator/minder acts as an escort
+                        to ensure the robot doesn't bump into hazards or get overcrowded by guests.
+                    </p>
+                </div>
+
+                <div class="logistics-card">
+                    <h3>What We Require on the Day</h3>
+                    <ul>
+                        <li>Free parking nearby for a Medium Wheelbase panel van (5m length, 2.5m height).</li>
+                        <li>A clear, safe walkway between the dressing area and the performance space.</li>
+                        <li>Light refreshments and water throughout the day.</li>
+                        <li>If we are on-site for 5 or more hours, a hot meal must be provided.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SECTION: Act Pricing Stub -->
+            <section id="act-pricing"></section>
+
+            <hr class="section-divider">
+
+            <!-- SECTION: Documentation -->
+            <section id="documentation">
+                <h2>Robot Rock Documentation</h2>
+
+                <div class="note">
+                    <em>Note:</em> All costume parts are treated with fire retardant spray.
+                </div>
+
+                <div class="doc-buttons">
+                    <a href="#" class="btn">
+                        <span class="btn-icon">📄</span>
+                        Megabeast Public Liability Cover.pdf
+                    </a>
+                    <a href="https://drive.google.com/file/d/18nEnr1897oddCO01oqKKg-arVxwXDLgi/view?usp=drive_link"
+                        target="_blank" rel="noopener noreferrer" class="btn btn-purple">
+                        <span class="btn-icon">📄</span>
+                        Robot Rock Tech Specs.pdf
+                    </a>
+                    <a href="https://drive.google.com/file/d/1HUPeCfnnHDjUpwwxkA3AF_LaRW2gZEBw/view?usp=drive_link"
+                        target="_blank" rel="noopener noreferrer" class="btn btn-purple">
+                        <span class="btn-icon">📄</span>
+                        Robot Rock Risk Assessment.pdf
+                    </a>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ====== RIGHT COLUMN: SIDEBAR ====== -->
+        <aside class="sidebar">
+
+            <div class="card">
+                <h2>Get in Touch!</h2>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" class="form-control" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" class="form-control" placeholder="Your Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-date">Event Date</label>
+                        <input type="date" id="event-date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Your Enquiry</label>
+                        <textarea id="message" class="form-control" placeholder="Tell us more about your event..."
+                            required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-submit">Transmit Enquiry</button>
+                </form>
+
+                <div class="contact-info">
+                    <h3>Contact Info</h3>
+                    <p>
+                        <strong>Megabeast Productions</strong><br>
+                        Email: <a href="mailto:info@megabeast.com">info@megabeast.com</a><br>
+                        Tel: <a href="tel:+447842128280">+44 (0) 7842 128 280</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="sidebar-promo">
+                <img src="robot 2.jpg" alt="Robot Rock Promo">
+            </div>
+
+        </aside>
+
+    </div>
+
+</body>
+
+</html>
